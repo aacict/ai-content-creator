@@ -2,3 +2,4 @@
 lambda/__pycache__/
 terraform/terraform.tfvars
 terraform/.terraform/
+terraform/.terraform.lock.hcl
