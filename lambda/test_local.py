@@ -35,19 +35,19 @@ def main():
         return
 
     # 4. Save image locally for inspection
-    timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
-    local_filename = f"test_image_{timestamp}.png"
-    with open(local_filename, "wb") as f:
-        f.write(image_bytes.getbuffer())
-    print(f"[4] Image saved locally: {local_filename}\n")
+    # timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
+    # local_filename = f"test_image_{timestamp}.png"
+    # with open(local_filename, "wb") as f:
+    #     f.write(image_bytes.getbuffer())
+    # print(f"[4] Image saved locally: {local_filename}\n")
 
-    # 5. Upload image to S3 (optional)
-    if BUCKET_NAME:
-        try:
-            s3_path = upload_to_s3(image_bytes, f"test_image_{timestamp}.png", BUCKET_NAME)
-            print(f"[5] Image uploaded to S3: {s3_path}\n")
-        except Exception as e:
-            print(f"⚠️ Failed to upload to S3: {e}\n")
+    # # 5. Upload image to S3 (optional)
+    # if BUCKET_NAME:
+    #     try:
+    #         s3_path = upload_to_s3(image_bytes, f"test_image_{timestamp}.png", BUCKET_NAME)
+    #         print(f"[5] Image uploaded to S3: {s3_path}\n")
+    #     except Exception as e:
+    #         print(f"⚠️ Failed to upload to S3: {e}\n")
 
     # 6. Post to Facebook (mock by default)
     print("[6] Posting to Facebook (mock mode)")
