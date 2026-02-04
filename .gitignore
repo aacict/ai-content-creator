@@ -1,2 +1,4 @@
 .env
 lambda/__pycache__/
+terraform/terraform.tfvars
+terraform/.terraform/
