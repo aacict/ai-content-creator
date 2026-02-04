@@ -1,7 +1,4 @@
 requests
-transformers 
-torch
-diffusers
 accelerate
 huggingface_hub
 pillow
