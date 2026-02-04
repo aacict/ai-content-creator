@@ -1,28 +1,42 @@
-import torch
-from diffusers import DiffusionPipeline
-from PIL import Image
+import os
+from io import BytesIO
+from huggingface_hub import InferenceClient
+import requests
 
-def setup_pipeline(model_name="stabilityai/stable-diffusion-xl-base-1.0", device="cuda"):
+def generate_image(prompt: str) -> bytes:
     """
-    Setup the Diffusion pipeline for local image generation.
-    """
-    pipe = DiffusionPipeline.from_pretrained(
-        model_name,
-        torch_dtype=torch.bfloat16,
-        safety_checker=None,       # optional, disables NSFW check
-    )
-    pipe.to(device)
-    return pipe
-
-def generate_image( prompt: str) -> Image.Image:
-    """
-    Generate a PIL Image from a text prompt using the DiffusionPipeline.
+    Generate image using Stable Diffusion XL via free HF Inference.
+    Returns bytes for Facebook API.
     """
     try:
-        pipe = setup_pipeline(device="cpu") 
-        output = pipe(prompt)
-        image = output.images[0]
-        return image
+        API_URL = "https://router.huggingface.co/hf-inference/models/stabilityai/stable-diffusion-xl-base-1.0"
+        headers = {
+            "Authorization": f"Bearer {os.environ['HF_TOKEN']}",
+        }
+
+        def query(payload):
+            response = requests.post(API_URL, headers=headers, json=payload)
+            return response.content
+
+        image_bytes = query({
+            "inputs": prompt,
+        })
+        
+        return image_bytes
+        
     except Exception as e:
-        print("⚠️ Error during image generation:", e)
+        print(f"⚠️ Image generation failed: {e}")
         return None
+
+
+# Test
+if __name__ == "__main__":
+    prompt = "A futuristic cityscape at sunset, vibrant colors, digital art"
+    image_bytes = generate_image(prompt)
+    
+    if image_bytes:
+        with open("test.jpg", "wb") as f:
+            f.write(image_bytes)
+        print("✅ Image generated and saved!")
+    else:
+        print("❌ Failed to generate image")
