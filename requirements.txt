@@ -1,3 +1,4 @@
 requests
 huggingface_hub
 pillow
+python-dotenv
